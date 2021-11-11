@@ -6,9 +6,9 @@ import Footer from "./Footer/Footer";
 
 function Layaout( {children}) {
     return (
-        <Box display={'flex'} flexDirection={'column'} height={'100vh'} justifyContent={'space-between'}>
+        <Box display={'flex'} flexDirection={'column'} height={'100vh'} justifyContent={'space-between'} >
             <MenuBar/>
-            <Box>
+            <Box display={'flex'} flexDirection={'column'} height={'80vh'} justifyContent={'space-between'}>
                 {children}
 
 

@@ -121,36 +121,18 @@ function MenuBar() {
             </Toolbar>
 
             <Toolbar className={clases.Toolbar2}>
-                <Box  className={clases.BoxOption}>
+
                     <AddCircleOutlineIcon/>
-                <Typography>Crear
+                <Typography  style={{marginRight:"10px"}}>Crear
 
                 </Typography>
-                    </Box>
 
-
-                <Box className={clases.BoxOption}>
-                    <EditIcon/>
-                    <Typography>Editar
-
-                    </Typography>
-                </Box>
-
-
-                <Box className={clases.BoxOption}>
-                    <DeleteIcon/>
-                    <Typography>Eliminar
-
-                    </Typography>
-                </Box>
-
-
-                <Box className={clases.BoxOption}>
+                
                     <ListIcon/>
                     <Typography>Listar
 
                     </Typography>
-                </Box>
+
 
             </Toolbar>
         </AppBar>

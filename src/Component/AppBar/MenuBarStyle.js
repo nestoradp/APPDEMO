@@ -3,11 +3,10 @@ export const useStyle = makeStyles((theme)=>({
 
 
     appBar:{
-        position:"relative"
+        position:"relative",
 
 
     },
-
 
     Toolbar1: {
         backgroundColor: "#561571",
@@ -22,17 +21,6 @@ export const useStyle = makeStyles((theme)=>({
             color: "black",
     },
 
-    BoxOption:{
-      display: "flex",
-        marginLeft: "20px",
-        marginRight:"40px"
-
-    },
-
-
-    Carrusel: {
-        minHeight: "10vh",
-    },
 
     nameUser:{
         marginLeft:"-5px",
