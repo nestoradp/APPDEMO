@@ -122,17 +122,16 @@ function MenuBar() {
 
             <Toolbar className={clases.Toolbar2}>
 
-                    <AddCircleOutlineIcon/>
+                <AddCircleOutlineIcon/>
                 <Typography  style={{marginRight:"10px"}}>Crear
-
                 </Typography>
 
-                
+
                     <ListIcon/>
+                <Link to={"/List"}>
                     <Typography>Listar
-
                     </Typography>
-
+                 </Link>
 
             </Toolbar>
         </AppBar>
