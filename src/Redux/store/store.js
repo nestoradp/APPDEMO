@@ -11,7 +11,7 @@ const composeEnhancers =
 
 const reducer =combineReducers({
   UserLogin:AuthReducerLogin,
-    ListBookmarks:BookmarksReducer,
+    List:BookmarksReducer,
     UIError:UIReducer
 });
 
