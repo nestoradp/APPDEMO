@@ -6,7 +6,7 @@ function Footer() {
     const clases =  useStyle();
 
     return (
-        <Box className={clases.Principal} component="footer" mt={'auto'} >
+        <Box className={clases.Principal} component="footer" mt={'auto'}  >
             <Typography variant="h6" align="center" gutterBottom>
                 Footer
             </Typography>

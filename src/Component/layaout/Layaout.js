@@ -8,13 +8,19 @@ function Layaout( {children}) {
     return (
         <Box display={'flex'} flexDirection={'column'} height={'100vh'} justifyContent={'space-between'} >
             <MenuBar/>
-            <Box display={'flex'} flexDirection={'column'} height={'80vh'} justifyContent={'space-between'}>
+            <Box display={'flex'} flexDirection={'column'}  justifyContent={'space-between'}>
                 {children}
 
 
             </Box>
 
-              <Footer/>
+
+            <Box >
+                <Footer/>
+
+
+            </Box>
+
 
         </Box>
     );
