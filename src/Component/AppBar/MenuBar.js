@@ -123,9 +123,10 @@ function MenuBar() {
             <Toolbar className={clases.Toolbar2}>
 
                 <AddCircleOutlineIcon/>
+                <Link to={"/create"}>
                 <Typography  style={{marginRight:"10px"}}>Crear
                 </Typography>
-
+                    </Link>
 
                     <ListIcon/>
                 <Link to={"/List"}>

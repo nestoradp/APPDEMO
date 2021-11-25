@@ -128,7 +128,7 @@ function FormLogin(props) {
         <Container maxWidth="sm" className={clases.ContainerPrincipal}>
             <Grid align="center" container>
                 <Grid item xs={12} className={clases.GridTitle}>
-                    <Typography variant="h4" className={clases.Title}>
+                    <Typography variant="h4" >
                         Acceda al Sistema
                     </Typography>
                 </Grid>

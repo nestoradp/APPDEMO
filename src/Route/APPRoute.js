@@ -6,6 +6,7 @@ import PrivateRoute from "./PrivateRoute";
 import Layaout from "../Component/layaout/Layaout";
 import Listar from "../Component/Home/PageListar/Listar";
 import Home from "../Component/Home/Home";
+import CreateBookmark from "../Component/CrearBookmark/CreateBookmark";
 
 
 
@@ -17,6 +18,7 @@ function AppRoute(props) {
                  <Layaout>
                      <PrivateRoute  path={"/"} compnent={Home} exact/>
                <PrivateRoute  path={"/list"} compnent={Listar} exact/>
+                     <PrivateRoute  path={"/create"} compnent={CreateBookmark} exact/>
                  </Layaout>
 
            </Switch>

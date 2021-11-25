@@ -10,8 +10,6 @@ import DataTable from "./DataTable/DataTable";
 import DataTableProp from "./DataTable/DataTableProp";
 
 
-
-
 function Listar(props) {
     const clases = useStyle();
    const dispatch = useDispatch();
@@ -56,7 +54,7 @@ const columnas=[
     },
 
 ]
-console.log(LBookmark);
+
 /*const data=[
     LBookmark.map((Bookmark, index)=>(
 
