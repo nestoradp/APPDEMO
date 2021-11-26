@@ -19,11 +19,39 @@ async function ListDataBookmarks(token){
 
 
 
+async function  SendDDataNewBookmark(TipoRecuros, IDCapitulo, path, abstract,token){
+    try{
+        return await axios.post(base_Url +"/bookmarks", {
+            "resource-id": IDCapitulo,
+            "resource-type": TipoRecuros,
+            path:path,
+            abstract: abstract
+
+        },{
+
+            headers: {
+                Authorization: "Bearer " + token,
+                'Content-Type': 'application/json',
+            },
+
+
+        })
+
+
+    } catch (error) {
+       throw error
+    }
+
+
+
+}
+
 
 
 
 
 export {
-    ListDataBookmarks
+    ListDataBookmarks,
+    SendDDataNewBookmark
 
 }

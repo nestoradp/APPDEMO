@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import {AuthReducerLogin} from "../reducer/AuthReducer";
 import {UIReducer} from "../reducer/ErrorReducer";
 import {BookmarksReducer} from "../reducer/BookmarksReducer";
+import {RequestDataReducer} from "../reducer/RequestDataReducer";
 
 const composeEnhancers =
     (typeof window !== "undefined" &&
@@ -11,6 +12,7 @@ const composeEnhancers =
 
 const reducer =combineReducers({
   UserLogin:AuthReducerLogin,
+    Requestdata: RequestDataReducer,
     List:BookmarksReducer,
     UIError:UIReducer
 });

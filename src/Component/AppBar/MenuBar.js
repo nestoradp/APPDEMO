@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {AppBar, Avatar, Button, Container, Grid, Toolbar, Typography, Menu, MenuItem, Box} from "@material-ui/core";
+import {AppBar, Avatar, Button, Grid, Toolbar, Typography, Menu, MenuItem} from "@material-ui/core";
 import { useStyle } from "./MenuBarStyle";
 import { Link } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";

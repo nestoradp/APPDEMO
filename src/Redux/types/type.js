@@ -3,6 +3,7 @@ const TYPES = {
     logout: 'LOGOUT',
 
     ListBookmarks:"ListBookmarks",
+    SalveRequestCreate: "SalveRequestCreate",
 
     UISetError: "UISetError",
     UIRemoveError: "UIRemoveError",

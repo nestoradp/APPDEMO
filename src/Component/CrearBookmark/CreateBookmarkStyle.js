@@ -38,7 +38,7 @@ export const useStyle = makeStyles((theme) => ({
     },
 
     select_placeholder: {
-        color: "#8080806e",
+        color: "#00205b",
     },
 
     buttons_content: {
@@ -47,5 +47,14 @@ export const useStyle = makeStyles((theme) => ({
         },
     },
 
-
+    MsgError: {
+        marginTop: "-10px",
+        marginLeft:"20px",
+        color: theme.palette.error.dark,
+        fontWeight: "bold",
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: "#FFF",
+    },
 }));
