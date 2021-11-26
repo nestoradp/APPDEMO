@@ -1,15 +1,15 @@
 const TYPES = {
-    login: "LOGIN",
-    logout: 'LOGOUT',
+  login: "LOGIN",
+  logout: "LOGOUT",
 
-    ListBookmarks:"ListBookmarks",
-    SalveRequestCreate: "SalveRequestCreate",
+  ListBookmarks: "ListBookmarks",
+  SalveRequestCreate: "SalveRequestCreate",
 
-    UISetError: "UISetError",
-    UIRemoveError: "UIRemoveError",
+  UISetError: "UISetError",
+  UIRemoveError: "UIRemoveError",
 
-    uiStartLoading: "uiStartLoading",
-    uiFinishLoading: "uiFinishLoading",
+  uiStartLoading: "uiStartLoading",
+  uiFinishLoading: "uiFinishLoading",
 };
 
 export { TYPES };
