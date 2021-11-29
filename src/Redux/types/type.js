@@ -4,6 +4,7 @@ const TYPES = {
 
   ListBookmarks: "ListBookmarks",
   SalveRequestCreate: "SalveRequestCreate",
+  RemoveRequestCreate:"RemoveRequestCreate",
 
   UISetError: "UISetError",
   UIRemoveError: "UIRemoveError",

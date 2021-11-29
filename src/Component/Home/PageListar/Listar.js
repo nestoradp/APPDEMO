@@ -3,7 +3,7 @@ import { Box, Container, Grid, Typography } from "@material-ui/core";
 import { useStyle } from "./ListarStyle";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  finishLoading,
+  finishLoading, removeError,
   setError,
   startLoading,
 } from "../../../Redux/Action/ActionError";
@@ -12,11 +12,14 @@ import { SalveBookmarksList } from "../../../Redux/Action/ActionBookmarks";
 import MaterialTable from "material-table";
 import DataTable from "./DataTable/DataTable";
 import DataTableProp from "./DataTable/DataTableProp";
+import {Alert, AlertTitle} from "@material-ui/lab";
+import {RemoveRequestDataForm} from "../../../Redux/Action/ActionFormBookmark";
 
 function Listar(props) {
   const clases = useStyle();
   const dispatch = useDispatch();
   const { tokens } = useSelector((state) => state.UserLogin);
+  const { id } = useSelector((state) => state.Requestdata);
   const [LBookmark, setLBookmark] = useState(null);
   //   const { } = useSelector( state => state.List )
 
@@ -35,6 +38,13 @@ function Listar(props) {
         dispatch(setError(message));
       });
   }, []);
+
+  const EliminarErroresRedux=()=>{
+    setTimeout(() => {
+      dispatch(RemoveRequestDataForm());
+    }, 2000);
+  }
+
 
   const columnas = [
     { title: "ID", field: "id" },
@@ -71,6 +81,16 @@ function Listar(props) {
           </Box>
         </Box>
       )}
+      {id &&(
+          <Box className={clases.send_support}>
+            <Alert severity="success">
+              {id && <AlertTitle>Marcador Creado</AlertTitle>}
+            </Alert>
+          </Box>
+      )}
+
+      {id ? EliminarErroresRedux() : ""}
+
     </Box>
   );
 }

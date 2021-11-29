@@ -12,10 +12,14 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import {Redirect, useHistory} from "react-router";
 import { useStyle } from "./CreateBookmarkStyle";
 import validator from "validator/es";
 import { useDispatch, useSelector } from "react-redux";
 import { SendDataFormCreateBookmark } from "../../Redux/Action/ActionFormBookmark";
+import {Link} from "react-router-dom";
+import {Alert, AlertTitle} from "@material-ui/lab";
+import {removeError} from "../../Redux/Action/ActionError";
 
 const InitialValue = {
   "TipoRecuros ": "",
@@ -32,7 +36,9 @@ function CreateBookmark() {
   const [ErrorAbstract, setErrorAbstract] = useState();
   const { tokens } = useSelector((state) => state.UserLogin);
   const { loading, msgError } = useSelector((state) => state.UIError);
+  const { id } = useSelector((state) => state.Requestdata);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const ValidatorisPath = () => {
     const path = pathRef.current.value;
@@ -55,6 +61,12 @@ function CreateBookmark() {
       return true;
     }
   };
+
+  const EliminarErroresRedux=()=>{
+    setTimeout(() => {
+      dispatch(removeError());
+    }, 2000);
+  }
 
   const handleChangeUseForm = (event) => {
     const InputChange = {
@@ -215,7 +227,19 @@ function CreateBookmark() {
             <Backdrop className={clases.backdrop} open={loading}>
               <CircularProgress size={100} color="inherit" />
             </Backdrop>
+            {id &&(
+             <Redirect to="/List" />
+
+            )}
           </Box>
+          {msgError &&(
+
+              <Alert severity="error">
+                <AlertTitle>{msgError}</AlertTitle>
+              </Alert>
+          )}
+
+          {msgError ? EliminarErroresRedux() : ""}
         </Grid>
       </Grid>
     </Container>

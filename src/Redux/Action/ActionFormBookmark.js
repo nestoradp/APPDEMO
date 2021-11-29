@@ -36,3 +36,8 @@ const SalveRequestDataForm = (id, StatusCode) => ({
     StatusCode,
   },
 });
+
+
+export  const RemoveRequestDataForm =()=>({
+  type : TYPES.RemoveRequestCreate
+})

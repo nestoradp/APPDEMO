@@ -8,6 +8,11 @@ export const RequestDataReducer = (state = {}, action) => {
         StatusCode: action.payload.StatusCode,
       };
 
+    case TYPES.RemoveRequestCreate:
+      return {};
+
+
+
     default:
       return state;
   }
