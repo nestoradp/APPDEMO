@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import {Backdrop, Box, CircularProgress, Container, Grid, Typography} from "@material-ui/core";
 import { useStyle } from "./ListarStyle";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,9 +8,6 @@ import {
   startLoading,
 } from "../../../Redux/Action/ActionError";
 import { ListDataBookmarks } from "../../../Axios/BookmarksAPI";
-import { SalveBookmarksList } from "../../../Redux/Action/ActionBookmarks";
-import MaterialTable from "material-table";
-import DataTable from "./DataTable/DataTable";
 import DataTableProp from "./DataTable/DataTableProp";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {RemoveRequestDataForm} from "../../../Redux/Action/ActionFormBookmark";
@@ -20,6 +17,7 @@ function Listar(props) {
   const dispatch = useDispatch();
   const { tokens } = useSelector((state) => state.UserLogin);
   const { id } = useSelector((state) => state.Requestdata);
+  const { loading, msgError } = useSelector((state) => state.UIError);
   const [LBookmark, setLBookmark] = useState(null);
   //   const { } = useSelector( state => state.List )
 
@@ -29,13 +27,11 @@ function Listar(props) {
       .then((data) => {
         dispatch(finishLoading());
         setLBookmark(data.data);
-        // const ListBookMark = data.data;
-        // dispatch(SalveBookmarksList(ListBookMark));
       })
       .catch((error) => {
         dispatch(finishLoading());
-        const { message } = JSON.parse(error.request.response);
-        dispatch(setError(message));
+       const { message } = JSON.parse(error.request.response);
+       dispatch(setError(message));
       });
   }, []);
 
@@ -45,42 +41,33 @@ function Listar(props) {
     }, 2000);
   }
 
-
-  const columnas = [
-    { title: "ID", field: "id" },
-
-    { title: "Abstract", field: "abstract" },
-
-    { title: "Path", field: "path" },
-
-    { title: "Time", field: "time" },
-
-    { title: "Author", field: "author" },
-  ];
-
-  /*const data=[
-    LBookmark.map((Bookmark, index)=>(
-
-
-       {id: Bookmark.id, abstract: Bookmark.abstract, path:Bookmark.path, time: Bookmark.time, author:Bookmark.path }
-
-    ))
-]*/
-
   return (
     <Box className={clases.ContainerPrincipal}>
-      {LBookmark && (
+      {LBookmark ? (
         <Box style={{ marginTop: "20px" }}>
           <Typography align="center">Listado de Marcadores</Typography>
-
-          {/*<Box >
-               <DataTable data={LBookmark}/>
-             </Box>*/}
-          <Box>
-            <DataTableProp data={LBookmark} />
+           <Box>
+            <DataTableProp
+                data={LBookmark}
+               setdata={setLBookmark}
+            />
           </Box>
+
         </Box>
+      ):(
+
+          <Backdrop className={clases.backdrop} open={loading}>
+            <CircularProgress size={100} color="inherit" />
+          </Backdrop>
+
       )}
+
+      {msgError &&(
+          <Alert severity="error">
+            <AlertTitle>{msgError}</AlertTitle>
+          </Alert>
+      )}
+
       {id &&(
           <Box className={clases.send_support}>
             <Alert severity="success">
@@ -88,9 +75,7 @@ function Listar(props) {
             </Alert>
           </Box>
       )}
-
       {id ? EliminarErroresRedux() : ""}
-
     </Box>
   );
 }

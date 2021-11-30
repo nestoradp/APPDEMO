@@ -1,7 +1,5 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
 import {
   TableCell,
   TableHead,
@@ -10,18 +8,22 @@ import {
   TableSortLabel,
   Toolbar,
   Typography,
-  Tooltip,
-  IconButton,
   Paper,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
   FormControlLabel,
-  Switch,
+  Switch, Container, FormControl, Button, Modal, Box,
 } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import { useStyle } from "../ListarStyle"
+import {Alert, AlertTitle} from "@material-ui/lab";
+import {Delete, Edit} from "@material-ui/icons";
+import {useDispatch, useSelector} from "react-redux";
+import {finishLoading, startLoading} from "../../../../Redux/Action/ActionError";
+import {DeleteApiBookmark} from "../../../../Axios/BookmarksAPI";
+import {useHistory} from "react-router";
+
 
 const headCells = [
   { id: "id", numeric: false, disablePadding: true, label: "ID" },
@@ -30,6 +32,7 @@ const headCells = [
   { id: "time", numeric: false, disablePadding: false, label: "Time" },
   { id: "author", numeric: false, disablePadding: false, label: "Author" },
   { id: "resource", numeric: false, disablePadding: false, label: "Resource" },
+  { id: "action", numeric: false, disablePadding: false, label: "Action" },
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -61,10 +64,8 @@ function stableSort(array, comparator) {
 function EnhancedTableHead(props) {
   const {
     classes,
-    onSelectAllClick,
     order,
     orderBy,
-    numSelected,
     rowCount,
     onRequestSort,
   } = props;
@@ -75,19 +76,11 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            padding={headCell.disablePadding ? "normal" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -111,55 +104,21 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.primary.light,
-          backgroundColor: lighten(theme.palette.error.dark, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.success.dark,
-        },
-  title: {
-    flex: "1 1 100%",
-  },
-}));
+
 
 const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const classes = useStyle();
+  const { HandleConfirmDeleteBookMark } = props;
 
   return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
+    <Toolbar>
+      <Typography
           className={classes.title}
           variant="h6"
           id="tableTitle"
@@ -167,96 +126,32 @@ const EnhancedTableToolbar = (props) => {
         >
           Marcadores
         </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
     </Toolbar>
   );
 };
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  paper: {
-    width: "100%",
-    marginBottom: theme.spacing(2),
-  },
-  table: {
-    minWidth: 750,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: "rect(0 0 0 0)",
-    height: 1,
-    margin: -1,
-    overflow: "hidden",
-    padding: 0,
-    position: "absolute",
-    top: 20,
-    width: 1,
-  },
-}));
 
-function DataTableProp({ data }) {
+function DataTableProp({ data,setdata }) {
   const rows = [data.map((r) => ({ id: r.id, path: r.path }))];
-
-  const classes = useStyles();
+  const classes = useStyle();
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("calories");
-  const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [OpenDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+  const [SelectId, setSelectId] = useState("");
+  const { tokens } = useSelector((state) => state.UserLogin);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+
+  // Funciones del DataTable
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = data.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -272,15 +167,84 @@ function DataTableProp({ data }) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  // Funciones del CRUD
+  const HandleConfirmDeleteBookMark=(id)=>{
+   setOpenDeleteConfirm(true);
+   setSelectId(id);
+  }
+
+  const DeleteBookmark =()=>{
+    const token = tokens["access-token"];
+   dispatch(startLoading());
+   DeleteApiBookmark(SelectId, token).then((data)=>{
+     setSelectId("");
+     setdata((data.filter(d=>d.id!==SelectId)))
+     dispatch(finishLoading());
+   }).catch((error)=>{
+     dispatch(finishLoading());
+     setdata((data.filter(d=>d.id!==SelectId)))
+     setSelectId("");
+   })
+
+
+
+
+   setOpenDeleteConfirm(false);
+  }
+
+
+  // Permite Abrir el Modal de Confirmacion del eliminar
+
+  const body =(
+      <Container className={classes.content + " " + classes.positionCard}>
+        <form >
+          <FormControl className={classes.select}>
+            <Alert severity="error">
+              <AlertTitle>Esta seguro que desea elminar el marcador seleccionados con id: {SelectId}</AlertTitle>
+            </Alert>
+            <Box
+            my={2}
+            display="flex"
+            justifyContent="space-around"
+
+
+            >
+            <Button
+                className={classes.ButtonEliminar}
+                variant="contained"
+                color="primary"
+                onClick={()=>setOpenDeleteConfirm(false)}
+            >
+              Cancelar
+            </Button>
+
+            <Button
+                className={classes.ButtonEliminar}
+                variant="contained"
+                color="primary"
+                onClick={DeleteBookmark}
+            >
+              Eliminar
+            </Button>
+
+            </Box>
+          </FormControl>
+        </form>
+      </Container>
+
+  )
+
+
   return (
-    <div className={classes.root}>
+    <div className={classes.rootPrincipal}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+            HandleConfirmDeleteBookMark={HandleConfirmDeleteBookMark}
+
+        />
         <TableContainer>
           <Table
             className={classes.table}
@@ -290,10 +254,8 @@ function DataTableProp({ data }) {
           >
             <EnhancedTableHead
               classes={classes}
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={data.length}
             />
@@ -301,30 +263,17 @@ function DataTableProp({ data }) {
               {stableSort(data, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.id}
-                      selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell>
                       <TableCell
                         component="th"
-                        id={labelId}
                         scope="row"
-                        padding="none"
+                        padding="normal"
                       >
                         {row.id}
                       </TableCell>
@@ -333,6 +282,16 @@ function DataTableProp({ data }) {
                       <TableCell align="left">{row.time}</TableCell>
                       <TableCell align="left">{row.author.name}</TableCell>
                       <TableCell align="left">{row.resource.id}</TableCell>
+                      <TableCell>
+                        <Edit/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <Delete
+                        onClick={()=>HandleConfirmDeleteBookMark(row.id)}
+
+                        />
+
+
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -358,6 +317,18 @@ function DataTableProp({ data }) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+      <Modal
+          open={OpenDeleteConfirm}
+          onClose={()=> setOpenDeleteConfirm(false)}
+
+          >
+        {body}
+
+      </Modal>
+
+
+
+
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {func} from "prop-types";
 const base_Url = process.env.REACT_APP_API_URL;
 
 async function ListDataBookmarks(token) {
@@ -42,4 +43,21 @@ async function SendDDataNewBookmark(
   }
 }
 
-export { ListDataBookmarks, SendDDataNewBookmark };
+
+async function DeleteApiBookmark(id, token) {
+
+  try{
+  await  axios.delete(base_Url + `/bookmarks/${id}`,{
+
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    })
+  }catch (error) {
+   throw error
+  }
+
+}
+
+export { ListDataBookmarks, SendDDataNewBookmark,DeleteApiBookmark };

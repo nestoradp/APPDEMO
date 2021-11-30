@@ -213,7 +213,7 @@ function FormLogin(props) {
             >
               <ReCAPTCHA
                 ref={captcha}
-                sitekey="6LerI34cAAAAAGffShgPtcGx_tP0gcJpZRsz7R4E"
+                sitekey="6Lcq8X0cAAAAAGLIOcWz2lgXvlY8kKGsiGxRECOz"
                 hl="es"
                 onChange={isValidatorCaptcha}
               />

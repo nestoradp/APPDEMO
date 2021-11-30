@@ -16,13 +16,10 @@ export const SendDataFormCreateBookmark = (
         dispatch(finishLoading());
         const id = data.data.id;
         const StatusCode = data.status;
-        console.log(data.data.id);
-        console.log(data.status);
         dispatch(SalveRequestDataForm(id, StatusCode));
       })
       .catch((error) => {
         dispatch(finishLoading());
-        console.log(error.request.response);
         const { message } = JSON.parse(error.request.response);
         dispatch(setError(message));
       });
