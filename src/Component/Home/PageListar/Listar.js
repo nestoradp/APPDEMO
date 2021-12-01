@@ -11,13 +11,14 @@ import { ListDataBookmarks } from "../../../Axios/BookmarksAPI";
 import DataTableProp from "./DataTable/DataTableProp";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {RemoveRequestDataForm} from "../../../Redux/Action/ActionFormBookmark";
+import {AuthCloseSesion} from "../../../Redux/Action/ActionAuth";
 
 function Listar(props) {
   const clases = useStyle();
   const dispatch = useDispatch();
   const { tokens } = useSelector((state) => state.UserLogin);
   const { id } = useSelector((state) => state.Requestdata);
-  const { loading, msgError } = useSelector((state) => state.UIError);
+  const { loading, msgError, status } = useSelector((state) => state.UIError);
   const [LBookmark, setLBookmark] = useState(null);
   //   const { } = useSelector( state => state.List )
 
@@ -31,7 +32,11 @@ function Listar(props) {
       .catch((error) => {
         dispatch(finishLoading());
        const { message } = JSON.parse(error.request.response);
-       dispatch(setError(message));
+        const status = error.request.status
+        if(status===403){
+          dispatch(AuthCloseSesion());
+        }
+        dispatch(setError(message, status));
       });
   }, []);
 
@@ -61,6 +66,7 @@ function Listar(props) {
           </Backdrop>
 
       )}
+
 
       {msgError &&(
           <Alert severity="error">

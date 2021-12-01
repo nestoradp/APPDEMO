@@ -1,6 +1,7 @@
 import { TYPES } from "../types/type";
 
 const initialState = {
+  status: null,
   loading: false,
   msgError: null,
 };
@@ -10,7 +11,8 @@ export const UIReducer = (state = { ...initialState }, action) => {
     case TYPES.UISetError:
       return {
         ...state,
-        msgError: action.payload,
+        msgError: action.payload.message,
+        status: action.payload.status
       };
     case TYPES.UIRemoveError:
       return {

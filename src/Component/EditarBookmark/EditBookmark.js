@@ -4,6 +4,8 @@ import {useStyle} from "./EditBookmarkStyle";
 import validator from "validator/es";
 import {useDispatch, useSelector} from "react-redux";
 import {SendEditBookmark} from "../../Axios/BookmarksAPI";
+import {finishLoading, removeError, setError, startLoading} from "../../Redux/Action/ActionError";
+import {AuthCloseSesion} from "../../Redux/Action/ActionAuth";
 
 
 export const EditBookmark =({
@@ -57,6 +59,8 @@ export const EditBookmark =({
 
     const handleSubmit = ()=>{
         if(ValidatorisPath()& ValidatorisAbstract()){;
+            dispatch(removeError());
+            dispatch(startLoading());
             const token = tokens["access-token"];
             const id = BookmarkEdit.id;
             SendEditBookmark(TipoRecuros,id,abstract,path,token).then((response)=>{
@@ -69,9 +73,16 @@ export const EditBookmark =({
                    }
                })
                 setdata(dataNueva);
+               dispatch(finishLoading());
                setOpenModalEdit(false);
             }).catch((error)=>{
-                console.log(error.request.response);
+                dispatch(finishLoading());
+                const { message } = JSON.parse(error.request.response);
+                const status = error.request.status
+                if(status===403){
+                    dispatch(AuthCloseSesion());
+                }
+                dispatch(setError(message, status));
             })
         }
     }

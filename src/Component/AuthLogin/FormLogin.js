@@ -20,6 +20,8 @@ import validator from "validator/es";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthRequestLogin } from "../../Redux/Action/ActionAuth";
 import { Redirect } from "react-router-dom";
+import {RemoveRequestDataForm} from "../../Redux/Action/ActionFormBookmark";
+import {removeError} from "../../Redux/Action/ActionError";
 
 const RegetEmail = new RegExp(
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -82,6 +84,12 @@ function FormLogin(props) {
       return true;
     }
   };
+
+  const EliminarErroresRedux=()=>{
+    setTimeout(() => {
+      dispatch(removeError());
+    }, 2000);
+  }
 
   const isValidatorTermin = () => {
     if (!Checked) {
@@ -191,20 +199,6 @@ function FormLogin(props) {
               </Grid>
             )}
 
-            {/*    <Grid container spacing={4}>
-                            <Grid item xl={6}>
-                                <Link to="/register">Restablecer contraseña</Link>
-
-                            </Grid>
-
-
-                            <Grid item xl={6}>
-                                <Link to={"/register"}>No Tienes Cuenta?</Link>
-
-                            </Grid>
-
-
-                        </Grid> */}
 
             <Box
               className={clases.Recaptcha}
@@ -234,7 +228,7 @@ function FormLogin(props) {
                 </Alert>
               </Grid>
             )}
-
+            {msgError ? EliminarErroresRedux() : ""}
             {AuthUser && <Redirect to={"/"} />}
 
             <Button

@@ -28,3 +28,10 @@ export const AuhtSalveUserlogin = (tokens, AuthUser) => ({
     AuthUser,
   },
 });
+
+
+export const AuthCloseSesion =()=>({
+
+    type: TYPES.logout
+
+});

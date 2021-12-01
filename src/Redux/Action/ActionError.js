@@ -1,8 +1,11 @@
 import { TYPES } from "../types/type";
 
-const setError = (error) => ({
+const setError = (message, status) => ({
   type: TYPES.UISetError,
-  payload: error,
+  payload: {
+    message,
+    status
+  },
 });
 
 const removeError = () => ({

@@ -14,16 +14,17 @@ import {
   TableContainer,
   TablePagination,
   FormControlLabel,
-  Switch, Container, FormControl, Button, Modal, Box, Grid, Select, MenuItem, TextField,
+  Switch, Container, FormControl, Button, Modal, Box, Grid, Select, MenuItem, TextField, Backdrop, CircularProgress,
 } from "@material-ui/core";
 import { useStyle } from "../ListarStyle"
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {Delete, Edit} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
-import {finishLoading, startLoading} from "../../../../Redux/Action/ActionError";
+import {finishLoading, removeError, setError, startLoading} from "../../../../Redux/Action/ActionError";
 import {DeleteApiBookmark} from "../../../../Axios/BookmarksAPI";
 import {useHistory} from "react-router";
 import {EditBookmark} from "../../../EditarBookmark/EditBookmark";
+import {AuthCloseSesion} from "../../../../Redux/Action/ActionAuth";
 
 
 const headCells = [
@@ -146,6 +147,7 @@ function DataTableProp({ data,setdata }) {
   const [SelectId, setSelectId] = useState("");
   const [BookmarkEdit, setBookmarkEdit] = useState(null);
   const { tokens } = useSelector((state) => state.UserLogin);
+  const { loading } = useSelector((state) => state.UIError);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -181,12 +183,18 @@ function DataTableProp({ data,setdata }) {
 
   const DeleteBookmark =()=>{
     const token = tokens["access-token"];
+    dispatch(removeError());
    dispatch(startLoading());
    DeleteApiBookmark(SelectId, token).then((data)=>{
      setSelectId("");
      setdata((data.filter(d=>d.id!==SelectId)))
      dispatch(finishLoading());
    }).catch((error)=>{
+   const status= error.request.status;
+   dispatch(setError("",status));
+     if(status===403){
+       dispatch(AuthCloseSesion());
+     }
      dispatch(finishLoading());
      setdata((data.filter(d=>d.id!==SelectId)))
      setSelectId("");
@@ -200,7 +208,6 @@ function DataTableProp({ data,setdata }) {
   setBookmarkEdit(bookmark);
     console.log(bookmark);
   }
-
 
   // Permite Abrir el Modal de Confirmacion del eliminar
 
@@ -347,7 +354,9 @@ function DataTableProp({ data,setdata }) {
       setdata={setdata}
   />
 </Modal>
-
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress size={100} color="inherit" />
+      </Backdrop>
 
     </div>
   );
