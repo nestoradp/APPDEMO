@@ -4,7 +4,7 @@ const setError = (message, status) => ({
   type: TYPES.UISetError,
   payload: {
     message,
-    status
+    status,
   },
 });
 

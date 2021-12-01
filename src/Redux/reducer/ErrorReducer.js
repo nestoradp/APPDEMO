@@ -12,7 +12,7 @@ export const UIReducer = (state = { ...initialState }, action) => {
       return {
         ...state,
         msgError: action.payload.message,
-        status: action.payload.status
+        status: action.payload.status,
       };
     case TYPES.UIRemoveError:
       return {

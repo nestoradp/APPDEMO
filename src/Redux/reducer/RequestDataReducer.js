@@ -11,8 +11,6 @@ export const RequestDataReducer = (state = {}, action) => {
     case TYPES.RemoveRequestCreate:
       return {};
 
-
-
     default:
       return state;
   }

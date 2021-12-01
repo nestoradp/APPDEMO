@@ -1,4 +1,4 @@
-import {lighten, makeStyles} from "@material-ui/core/styles";
+import { lighten, makeStyles } from "@material-ui/core/styles";
 export const useStyle = makeStyles((theme) => ({
   ContainerPrincipal: {},
 
@@ -28,28 +28,25 @@ export const useStyle = makeStyles((theme) => ({
     color: "white",
   },
 
-
-//Style del DataTable
+  //Style del DataTable
 
   root: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
   },
   highlight:
-      theme.palette.type === "light"
-          ? {
-            color: theme.palette.primary.light,
-            backgroundColor: lighten(theme.palette.error.dark, 0.85),
-          }
-          : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.success.dark,
-          },
+    theme.palette.type === "light"
+      ? {
+          color: theme.palette.primary.light,
+          backgroundColor: lighten(theme.palette.error.dark, 0.85),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.success.dark,
+        },
   title: {
     flex: "1 1 100%",
   },
-
-
 
   rootPrincipal: {
     width: "100%",
@@ -73,8 +70,7 @@ export const useStyle = makeStyles((theme) => ({
     width: 1,
   },
 
-
- // Modal
+  // Modal
   content: {
     position: "absolute",
     backgroundColor: "#fff",
@@ -104,7 +100,7 @@ export const useStyle = makeStyles((theme) => ({
   select: {
     width: "100%",
     margin: "1rem 0",
-    color: '#00205b',
+    color: "#00205b",
   },
 
   type_color: {
@@ -122,13 +118,11 @@ export const useStyle = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: "#FFF",
-
   },
   input: {
     borderRadius: "20px",
     // backgroundColor: "#ab003c",
   },
-
 
   edit_modal: {
     backgroundColor: "rgba(0,0,0,0)",
@@ -139,7 +133,7 @@ export const useStyle = makeStyles((theme) => ({
     overflowY: "scroll",
   },
 
-  icons:{
-    cursor:"pointer"
+  icons: {
+    cursor: "pointer",
   },
 }));

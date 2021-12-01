@@ -42,52 +42,44 @@ async function SendDDataNewBookmark(
   }
 }
 
-
 async function DeleteApiBookmark(id, token) {
-
-  try{
-  await  axios.delete(base_Url + `/bookmarks/${id}`,{
-
+  try {
+    await axios.delete(base_Url + `/bookmarks/${id}`, {
       headers: {
         Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
-    })
-  }catch (error) {
-   throw error
+    });
+  } catch (error) {
+    throw error;
   }
-
 }
 
-
-async function SendEditBookmark(  TipoRecuros,
-                                  id,
-                              abstract,
-                                  path,
-                             token,
-                                  ) {
-
-  try{
-  await axios.put(base_Url+`/bookmarks/${id}`,
-        {
-             id: id,
-          "resource-type": TipoRecuros,
-          abstract: abstract,
-            path: path,
-
-
-        },{
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
+async function SendEditBookmark(TipoRecuros, id, abstract, path, token) {
+  try {
+    await axios.put(
+      base_Url + `/bookmarks/${id}`,
+      {
+        id: id,
+        "resource-type": TipoRecuros,
+        abstract: abstract,
+        path: path,
       },
-    })
-
-  }catch (error) {
-    throw error
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    throw error;
   }
 }
 
-
-
-export { ListDataBookmarks, SendDDataNewBookmark,DeleteApiBookmark,SendEditBookmark };
+export {
+  ListDataBookmarks,
+  SendDDataNewBookmark,
+  DeleteApiBookmark,
+  SendEditBookmark,
+};
