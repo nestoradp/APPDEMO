@@ -40,7 +40,7 @@ export const EditBookmark = ({
   const [ErrorAbstract, setErrorAbstract] = useState();
   const { tokens } = useSelector((state) => state.UserLogin);
   const dispatch = useDispatch();
-
+//Validaciones
   const ValidatorisPath = () => {
     if (validator.isEmpty(path)) {
       setErrorPath("Campo requerido");
@@ -67,7 +67,7 @@ export const EditBookmark = ({
     };
     setuseForm(InputChange);
   };
-
+// Funcion para enviar los datos a la Api para editar el Bookmark
   const handleSubmit = () => {
     if (ValidatorisPath() & ValidatorisAbstract()) {
       dispatch(removeError());

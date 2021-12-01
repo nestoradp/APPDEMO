@@ -4,7 +4,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Checkbox,
   TableSortLabel,
   Toolbar,
   Typography,
@@ -20,10 +19,6 @@ import {
   Button,
   Modal,
   Box,
-  Grid,
-  Select,
-  MenuItem,
-  TextField,
   Backdrop,
   CircularProgress,
 } from "@material-ui/core";
@@ -154,7 +149,7 @@ function DataTableProp({ data, setdata }) {
   const { tokens } = useSelector((state) => state.UserLogin);
   const { loading } = useSelector((state) => state.UIError);
   const dispatch = useDispatch();
-  const history = useHistory();
+
 
   // Funciones del DataTable
   const handleRequestSort = (event, property) => {
@@ -184,7 +179,7 @@ function DataTableProp({ data, setdata }) {
     setOpenDeleteConfirm(true);
     setSelectId(id);
   };
-
+// Funcion para Eliminar un Bookmark y consultar el servicio del Api
   const DeleteBookmark = () => {
     const token = tokens["access-token"];
     dispatch(removeError());
@@ -208,11 +203,10 @@ function DataTableProp({ data, setdata }) {
 
     setOpenDeleteConfirm(false);
   };
-
+// Abriri el Modal de editar
   const HandleModalEditBookMark = (bookmark) => {
     setOpenModalEdit(true);
     setBookmarkEdit(bookmark);
-    console.log(bookmark);
   };
 
   // Permite Abrir el Modal de Confirmacion del eliminar

@@ -3,15 +3,12 @@ import {
   Backdrop,
   Box,
   CircularProgress,
-  Container,
-  Grid,
   Typography,
 } from "@material-ui/core";
 import { useStyle } from "./ListarStyle";
 import { useDispatch, useSelector } from "react-redux";
 import {
   finishLoading,
-  removeError,
   setError,
   startLoading,
 } from "../../Redux/Action/ActionError";
@@ -28,8 +25,9 @@ function Listar(props) {
   const { id } = useSelector((state) => state.Requestdata);
   const { loading, msgError, status } = useSelector((state) => state.UIError);
   const [LBookmark, setLBookmark] = useState(null);
-  //   const { } = useSelector( state => state.List )
 
+
+  // Llama al servicio Api para obtener la lista de bookmark
   useEffect(() => {
     dispatch(startLoading());
     ListDataBookmarks(tokens["access-token"])
