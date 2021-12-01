@@ -343,6 +343,8 @@ function DataTableProp({ data,setdata }) {
   <EditBookmark
       setOpenModalEdit={setOpenModalEdit}
       BookmarkEdit ={BookmarkEdit}
+      data={data}
+      setdata={setdata}
   />
 </Modal>
 

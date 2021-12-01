@@ -2,30 +2,33 @@ import {Box, Button, Container, FormControl, Grid, MenuItem, Select, TextField, 
 import React, {useRef, useState} from "react";
 import {useStyle} from "./EditBookmarkStyle";
 import validator from "validator/es";
-
-const InitialValue = {
-    "TipoRecuros ": "",
-    IDCapitulo: "",
-    abstract:""
-};
-
+import {useDispatch, useSelector} from "react-redux";
+import {SendEditBookmark} from "../../Axios/BookmarksAPI";
 
 
 export const EditBookmark =({
                                 setOpenModalEdit,
-                                BookmarkEdit
+                                BookmarkEdit,
+                                data,
+                                setdata
                           }) => {
  const classes = useStyle();
-    const pathRef = useRef();
-    const abstractRef = useRef();
-    const [useForm, setuseForm] = useState(InitialValue);
-    const { TipoRecuros, IDCapitulo,abstract } = useForm;
+    const [useForm, setuseForm] = useState(
+        {
+            TipoRecuros: BookmarkEdit.resource.type,
+            IDCapitulo: BookmarkEdit.resource.id,
+            abstract: BookmarkEdit.abstract,
+            path: BookmarkEdit.path
+        }
+    );
+    const { TipoRecuros, IDCapitulo,abstract, path } = useForm;
     const [ErrorPath, setErrorPath] = useState();
     const [ErrorAbstract, setErrorAbstract] = useState();
+    const { tokens } = useSelector((state) => state.UserLogin);
+    const dispatch = useDispatch();
 
 
     const ValidatorisPath = () => {
-        const path = pathRef.current.value;
         if (validator.isEmpty(path)) {
             setErrorPath("Campo requerido");
             return false;
@@ -36,8 +39,6 @@ export const EditBookmark =({
     };
 
     const ValidatorisAbstract = () => {
-        const abstract = abstractRef.current.value;
-        console.log(abstract);
         if (validator.isEmpty(abstract)) {
             setErrorAbstract("Campo requerido");
             return false;
@@ -53,6 +54,28 @@ export const EditBookmark =({
         };
         setuseForm(InputChange);
     };
+
+    const handleSubmit = ()=>{
+        if(ValidatorisPath()& ValidatorisAbstract()){;
+            const token = tokens["access-token"];
+            const id = BookmarkEdit.id;
+            SendEditBookmark(TipoRecuros,id,abstract,path,token).then((response)=>{
+               const dataNueva = data;
+               dataNueva.map(d=>{
+                   if(d.id===id){
+                       d.id =id
+                       d.abstract= abstract;
+                       d.path= path;
+                   }
+               })
+                setdata(dataNueva);
+               setOpenModalEdit(false);
+            }).catch((error)=>{
+                console.log(error.request.response);
+            })
+        }
+    }
+
 
     return (
         <Container maxWidth="sm" className={classes.ContainerModal}>
@@ -76,14 +99,9 @@ export const EditBookmark =({
                             style={{borderRadius: "30px"}}
                             name="TipoRecuros"
                             displayEmpty
-                            value={BookmarkEdit.resource.type}
-                            // onChange={handleChangeUseForm}
+                            value={TipoRecuros}
+                            onChange={handleChangeUseForm}
                         >
-                            {/*!TipoRecuros && (
-                    <MenuItem value="" disabled>
-                      <div className={classes.select_placeholder}>Seleccione</div>
-                    </MenuItem>
-                )*/}
                             <MenuItem value="chapter">Capitulo</MenuItem>
                         </Select>
                     </FormControl>
@@ -101,15 +119,10 @@ export const EditBookmark =({
                         <Select
                             style={{borderRadius: "30px"}}
                             name="IDCapitulo"
-                              value={BookmarkEdit.resource.id}
+                          value={IDCapitulo}
                               onChange={handleChangeUseForm}
                             displayEmpty
                         >
-                            {/*!IDCapitulo && (
-                    <MenuItem value="" disabled>
-                      <div className={clases.select_placeholder}>Seleccione</div>
-                    </MenuItem>
-                )*/}
                             <MenuItem value="6165066067980eee183accf1">Capitulo 1</MenuItem>
                             <MenuItem value="613be60465f0f6cf7361f270">Capitulo 2</MenuItem>
                             <MenuItem value="613bda7065f0f6cf7361f252">Capitulo 3</MenuItem>
@@ -128,10 +141,19 @@ export const EditBookmark =({
                             margin="normal"
                             placeholder="Ej.:12;56"
                             name="path"
+                            value={path}
+                            onChange={handleChangeUseForm}
+                            onBlur={ValidatorisPath}
                             InputProps={{
                                 className: classes.input,
                             }}
                         />
+                        {ErrorPath && (
+                            <Grid style={{ marginTop: "5px", marginBlockEnd: "5px" }}>
+                                <Typography className={classes.MsgError}>{ErrorPath}</Typography>
+                            </Grid>
+                        )}
+
                     </FormControl>
 
                     <FormControl variant="outlined" className={classes.select}>
@@ -149,14 +171,18 @@ export const EditBookmark =({
                             name="abstract"
                             style={{borderRadius: "30px"}}
                             multiline
-                            inputRef={abstractRef}
                             rows={6}
                             variant="outlined"
-                         //   defaultValue={ BookmarkEdit.abstract}
-                            value={BookmarkEdit.abstract}
-                          //  onChange={handleChangeUseForm}
+                            value={abstract}
+                           onChange={handleChangeUseForm}
                             onBlur={ValidatorisAbstract}
                         />
+                        {ErrorAbstract && (
+                            <Grid style={{ marginTop: "10px", }}>
+                                <Typography className={classes.MsgError}>{ErrorAbstract}</Typography>
+                            </Grid>
+                        )}
+
                     </FormControl>
                     <Box
                         my={2}
@@ -178,7 +204,7 @@ export const EditBookmark =({
                             className={classes.ButtonEditar}
                             variant="contained"
                             color="primary"
-                          //  onClick={DeleteBookmark}
+                            onClick={handleSubmit}
                         >
                             Editar
                         </Button>
