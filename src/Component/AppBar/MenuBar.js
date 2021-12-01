@@ -19,7 +19,7 @@ import ListIcon from "@material-ui/icons/List";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {AuthCloseSesion} from "../../Redux/Action/ActionAuth";
+import { AuthCloseSesion } from "../../Redux/Action/ActionAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,9 +51,9 @@ function MenuBar() {
     setAnchorEl(null);
   };
 
-  const  handleCloseSesion=()=>{
+  const handleCloseSesion = () => {
     dispatch(AuthCloseSesion());
-  }
+  };
 
   return (
     <AppBar className={clases.appBar}>
@@ -115,8 +115,8 @@ function MenuBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
-                <MenuItem >Mi Perfil</MenuItem>
-                <MenuItem >Configuracion</MenuItem>
+                <MenuItem>Mi Perfil</MenuItem>
+                <MenuItem>Configuracion</MenuItem>
                 <MenuItem onClick={handleCloseSesion}>Cerrar Sesion</MenuItem>
               </Menu>
             </Grid>

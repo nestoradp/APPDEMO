@@ -1,7 +1,12 @@
-import {finishLoading, removeError, setError, startLoading} from "./ActionError";
+import {
+  finishLoading,
+  removeError,
+  setError,
+  startLoading,
+} from "./ActionError";
 import { SendDDataNewBookmark } from "../../Axios/BookmarksAPI";
 import { TYPES } from "../types/type";
-import {AuthCloseSesion} from "./ActionAuth";
+import { AuthCloseSesion } from "./ActionAuth";
 
 export const SendDataFormCreateBookmark = (
   TipoRecuros,
@@ -11,7 +16,7 @@ export const SendDataFormCreateBookmark = (
   token
 ) => {
   return (dispatch) => {
-      dispatch(removeError());
+    dispatch(removeError());
     dispatch(startLoading());
     SendDDataNewBookmark(TipoRecuros, IDCapitulo, path, abstract, token)
       .then((data) => {
@@ -23,10 +28,10 @@ export const SendDataFormCreateBookmark = (
       .catch((error) => {
         dispatch(finishLoading());
         const { message } = JSON.parse(error.request.response);
-        const status = error.request.status
-          if(status===403){
-              dispatch(AuthCloseSesion());
-          }
+        const status = error.request.status;
+        if (status === 403) {
+          dispatch(AuthCloseSesion());
+        }
         dispatch(setError(message, status));
       });
   };
@@ -40,7 +45,6 @@ const SalveRequestDataForm = (id, StatusCode) => ({
   },
 });
 
-
-export  const RemoveRequestDataForm =()=>({
-  type : TYPES.RemoveRequestCreate
-})
+export const RemoveRequestDataForm = () => ({
+  type: TYPES.RemoveRequestCreate,
+});

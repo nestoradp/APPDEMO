@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import FormLogin from "../Component/AuthLogin/FormLogin";
 import PrivateRoute from "./PrivateRoute";
 import Layaout from "../Component/layaout/Layaout";
-import Listar from "../Component/Home/PageListar/Listar";
+import Listar from "../Component/DataListBookmark/Listar";
 import Home from "../Component/Home/Home";
 import CreateBookmark from "../Component/CrearBookmark/CreateBookmark";
 
