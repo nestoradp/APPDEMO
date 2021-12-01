@@ -107,6 +107,11 @@ export const useStyle = makeStyles((theme) => ({
     color: '#00205b',
   },
 
+  type_color: {
+    color: "#00205b",
+    fontSize: "16px",
+    fontWeight: "bold",
+  },
 
   MsgError: {
     marginTop: "-10px",
@@ -118,5 +123,23 @@ export const useStyle = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: "#FFF",
 
-  }
+  },
+  input: {
+    borderRadius: "20px",
+    // backgroundColor: "#ab003c",
+  },
+
+
+  edit_modal: {
+    backgroundColor: "rgba(0,0,0,0)",
+    display: "flex",
+    position: "absolute",
+    alignItems: "center",
+    justifyContent: "center",
+    overflowY: "scroll",
+  },
+
+  icons:{
+    cursor:"pointer"
+  },
 }));

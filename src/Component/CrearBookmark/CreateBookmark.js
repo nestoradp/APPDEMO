@@ -97,7 +97,7 @@ function CreateBookmark() {
     <Container maxWidth="sm" className={clases.ContainerPrincipal}>
       <Grid align="center" container>
         <Grid item xs={12} className={clases.GridTitle}>
-          <Typography variant="h4">Crear Marcador</Typography>
+          <Typography variant="h4">Editar Marcador</Typography>
         </Grid>
 
         <Grid align="left" item xs={12} className={clases.GridForm}>

@@ -14,7 +14,7 @@ import {
   TableContainer,
   TablePagination,
   FormControlLabel,
-  Switch, Container, FormControl, Button, Modal, Box,
+  Switch, Container, FormControl, Button, Modal, Box, Grid, Select, MenuItem, TextField,
 } from "@material-ui/core";
 import { useStyle } from "../ListarStyle"
 import {Alert, AlertTitle} from "@material-ui/lab";
@@ -23,6 +23,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {finishLoading, startLoading} from "../../../../Redux/Action/ActionError";
 import {DeleteApiBookmark} from "../../../../Axios/BookmarksAPI";
 import {useHistory} from "react-router";
+import {EditBookmark} from "../../../EditarBookmark/EditBookmark";
 
 
 const headCells = [
@@ -141,7 +142,9 @@ function DataTableProp({ data,setdata }) {
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [OpenDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+  const [OpenModalEdit, setOpenModalEdit] = useState(false);
   const [SelectId, setSelectId] = useState("");
+  const [BookmarkEdit, setBookmarkEdit] = useState(null);
   const { tokens } = useSelector((state) => state.UserLogin);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -189,10 +192,13 @@ function DataTableProp({ data,setdata }) {
      setSelectId("");
    })
 
-
-
-
    setOpenDeleteConfirm(false);
+  }
+
+  const HandleModalEditBookMark=(bookmark)=>{
+    setOpenModalEdit(true);
+  setBookmarkEdit(bookmark);
+    console.log(bookmark);
   }
 
 
@@ -236,7 +242,6 @@ function DataTableProp({ data,setdata }) {
       </Container>
 
   )
-
 
   return (
     <div className={classes.rootPrincipal}>
@@ -283,9 +288,14 @@ function DataTableProp({ data,setdata }) {
                       <TableCell align="left">{row.author.name}</TableCell>
                       <TableCell align="left">{row.resource.id}</TableCell>
                       <TableCell>
-                        <Edit/>
+                        <Edit
+                            className={classes.icons}
+                        onClick={()=>HandleModalEditBookMark(row)}
+
+                        />
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <Delete
+                            className={classes.icons}
                         onClick={()=>HandleConfirmDeleteBookMark(row.id)}
 
                         />
@@ -320,13 +330,21 @@ function DataTableProp({ data,setdata }) {
       <Modal
           open={OpenDeleteConfirm}
           onClose={()=> setOpenDeleteConfirm(false)}
-
-          >
+       >
         {body}
 
       </Modal>
 
-
+<Modal
+    className={classes.edit_modal}
+    open={OpenModalEdit}
+    onClose={()=>setOpenModalEdit(false)}
+>
+  <EditBookmark
+      setOpenModalEdit={setOpenModalEdit}
+      BookmarkEdit ={BookmarkEdit}
+  />
+</Modal>
 
 
     </div>
