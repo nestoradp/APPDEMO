@@ -17,12 +17,11 @@ import { useStyle } from "./CreateBookmarkStyle";
 import validator from "validator/es";
 import { useDispatch, useSelector } from "react-redux";
 import { SendDataFormCreateBookmark } from "../../Redux/Action/ActionFormBookmark";
-import { Link } from "react-router-dom";
 import { Alert, AlertTitle } from "@material-ui/lab";
 import { removeError } from "../../Redux/Action/ActionError";
 
 const InitialValue = {
-  "TipoRecuros ": "",
+  TipoRecursos: "",
   IDCapitulo: "",
 };
 
@@ -31,14 +30,37 @@ function CreateBookmark() {
   const pathRef = useRef();
   const abstractRef = useRef();
   const [useForm, setuseForm] = useState(InitialValue);
-  const { TipoRecuros, IDCapitulo } = useForm;
+  const { TipoRecursos, IDCapitulo } = useForm;
   const [ErrorPath, setErrorPath] = useState();
   const [ErrorAbstract, setErrorAbstract] = useState();
+  const [ErrorTypoRecurso, setErrorTypoRecurso] = useState();
+  const [ErrorIdCapitulo, setErrorIdCapitulo] = useState();
   const { tokens } = useSelector((state) => state.UserLogin);
   const { loading, msgError } = useSelector((state) => state.UIError);
   const { id } = useSelector((state) => state.Requestdata);
   const dispatch = useDispatch();
-  const history = useHistory();
+
+  const ValidatTypeRecurso=()=>{
+
+    if(validator.isEmpty(TipoRecursos)){
+      setErrorTypoRecurso("Debe Seleccionar una opción")
+      return false;
+    }else {
+      setErrorTypoRecurso(null);
+      return true;
+    }
+    }
+
+  const ValidateCapituloID=()=>{
+
+    if(validator.isEmpty(IDCapitulo)){
+      setErrorIdCapitulo("Debe Seleccionar una opción")
+      return false;
+    }else {
+      setErrorIdCapitulo(null);
+      return true;
+    }
+  }
 
   const ValidatorisPath = () => {
     const path = pathRef.current.value;
@@ -80,10 +102,10 @@ function CreateBookmark() {
     const path = pathRef.current.value;
     const abstract = abstractRef.current.value;
     const token = tokens["access-token"];
-    if (ValidatorisAbstract() & ValidatorisPath()) {
+    if (ValidatorisAbstract() & ValidatorisPath()& ValidatTypeRecurso()&ValidateCapituloID()) {
       dispatch(
         SendDataFormCreateBookmark(
-          TipoRecuros,
+            TipoRecursos,
           IDCapitulo,
           path,
           abstract,
@@ -113,18 +135,25 @@ function CreateBookmark() {
             </label>
             <Select
               style={{ borderRadius: "30px" }}
-              name="TipoRecuros"
+              name="TipoRecursos"
               displayEmpty
-              value={TipoRecuros}
+              value={TipoRecursos}
+              onBlur={ValidatTypeRecurso}
               onChange={handleChangeUseForm}
             >
-              {!TipoRecuros && (
+              {!TipoRecursos && (
                 <MenuItem value="" disabled>
                   <div className={clases.select_placeholder}>Seleccione</div>
                 </MenuItem>
               )}
               <MenuItem value="chapter">Capitulo</MenuItem>
             </Select>
+            {ErrorTypoRecurso && (
+                <Grid style={{ marginTop: "10px", marginBlockEnd: "5px" }}>
+                  <Typography className={clases.MsgError}>{ErrorTypoRecurso}</Typography>
+                </Grid>
+            )}
+
           </FormControl>
 
           <FormControl variant="outlined" className={clases.select}>
@@ -142,6 +171,7 @@ function CreateBookmark() {
               name="IDCapitulo"
               value={IDCapitulo}
               onChange={handleChangeUseForm}
+              onBlur={ValidateCapituloID}
               displayEmpty
             >
               {!IDCapitulo && (
@@ -157,6 +187,11 @@ function CreateBookmark() {
               <MenuItem value="613b04af65f0f6cf7361f0ee">Capitulo 6</MenuItem>
               <MenuItem value="61399a0d65f0f6cf7361ef12">Capitulo 7</MenuItem>
             </Select>
+            {ErrorIdCapitulo && (
+                <Grid style={{ marginTop: "10px", marginBlockEnd: "5px" }}>
+                  <Typography className={clases.MsgError}>{ErrorIdCapitulo}</Typography>
+                </Grid>
+            )}
           </FormControl>
 
           <FormControl variant="outlined" fullWidth>
@@ -175,7 +210,7 @@ function CreateBookmark() {
               }}
             />
             {ErrorPath && (
-              <Grid style={{ marginTop: "5px", marginBlockEnd: "5px" }}>
+              <Grid style={{ marginTop: "10px"}}>
                 <Typography className={clases.MsgError}>{ErrorPath}</Typography>
               </Grid>
             )}
